@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="lane_demo_world">
+
+    <!-- 1) Ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- 2) Sun -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- 3) The “vehicle” is still a 0.2×0.2×0.2 blue box,
+          but now it carries a DVS sensor on its front. -->
+    <model name="camera_model">
+      <!-- Keep the box’s center at z=1.0 m so it drives between the two white lanes -->
+      <pose>0 0 1.0 0 0 0</pose>
+
+      <link name="link">
+        <pose>0 0 0 0 0 0</pose>
+
+        <!-- Visualize the blue box -->
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>0.2 0.2 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 1 1</ambient>
+            <diffuse>0 0 1 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- ─────────────────────────────────────────────────────
+             ↓  THIS IS THE DVS CAMERA SENSOR (instead of a normal camera) ↓
+             ─────────────────────────────────────────────────────
+        -->
+        <sensor name="dvs_cam" type="camera">
+          <!-- place it 0.1 m above the box center (i.e. at z=1.1 m) -->
+          <pose>0 0 0.1 0 0 0</pose>
+
+          <!-- The “camera” sub‐element defines the virtual image plane size -->
+          <camera name="__default__">
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>128</width>
+              <height>128</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+
+          <!-- We set this to 0 if you don’t want the normal image published -->
+          <visualize>0</visualize>
+
+          <!-- The plugin tag below is exactly from the gazebo_dvs_plugin README: -->
+          <!-- :contentReference[oaicite:1]{index=1} -->
+          <plugin name="dvs_plugin" filename="libgazebo_dvs_plugin.so">
+            <!-- cameraName and robotNamespace determine the ROS topic: -->
+            <cameraName>front_cam</cameraName>
+            <robotNamespace>lane_demo</robotNamespace>
+
+            <!-- Pixel‐wise threshold (change to tune sensitivity) -->
+            <eventThreshold>10</eventThreshold>
+
+            <!-- Topic on which camera_info is published (optional) -->
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+
+            <!-- Optional (default is "events"); uncomment to override:
+            <eventsTopicName>events</eventsTopicName>
+            -->
+          </plugin>
+        </sensor>
+
+      </link>
+    </model>
+
+  </world>
+</sdf>

@@ -1,0 +1,19 @@
+# eval_config_seg2cmd.txt
+
+basedir = /home/marikan/catkin_ws/src/lane_marking_demo
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_04_t14_03/best_model_007.pth
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_04_t14_03/model_050.pth
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_07_t15_58/best_model_002.pth
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_18_t14_55/best_model_050.pth
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_18_t21_28/best_model_049.pth
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_19_t11_16/best_model_045.pth
+# ViT
+# checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_19_t13_42/best_model_050.pth
+# 4 datasets figure8
+checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_19_t14_19_2/best_model_179.pth
+device = cuda
+
+# Optional (based on your train.py setup)
+logdir = logs
+dataset = dataset132
+combine_checkpoints = False

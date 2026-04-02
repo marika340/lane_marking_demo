@@ -1,0 +1,15 @@
+--basedir /home/marikan/catkin_ws/src/lane_marking_demo
+--dataset_range 417-516
+--logdir logs
+--model_type ViT
+--epochs 200
+--lr 1e-4
+--device cuda
+--seq_len 16
+--batch_size 8
+--num_workers 4
+--train_dir 417-500,617-700
+--val_dir 501-516,701-716
+
+# Optional: based on evaluation
+--checkpoint_path /home/marikan/catkin_ws/src/lane_marking_demo/logs/d08_07_t13_27/best_model_002.pth

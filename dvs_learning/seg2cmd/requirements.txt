@@ -1,0 +1,11 @@
+torch==2.1.2+cu118
+torchvision==0.16.2+cu118
+networkx==2.8.8
+fsspec==2024.6.1
+filelock==3.13.1
+sympy==1.13.3
+jinja2==3.1.4
+typing-extensions==4.12.2tensorboard
+tensorboard
+# Add any other packages you manually installed
+

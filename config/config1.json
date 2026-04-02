@@ -1,0 +1,10 @@
+{
+  "NUM_RUNS": 100,
+  "TRACK": "circle",
+  "camera_range": 2.0,
+  "camera_height": 0.5,
+  "duration_min": 5.0,
+  "duration_max": 15.0, 
+  "depart_thresh": 5.0,
+  "tolerance": 1.0
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+    <!-- 3) The “vehicle” is still a 0.2×0.2×0.2 blue box,
+          but now it carries a DVS sensor on its front. -->
+    <model name="camera_model">
+      <static>false</static>
+      <!-- Keep the box’s center at z=1.0 m so it drives between the two white lanes -->
+      <pose>0.5 0 0.2 0 0 0</pose>
+
+      <link name="link">
+        <gravity>false</gravity>
+        <inertial>
+            <mass>1.0</mass>
+            <inertia>
+            <ixx>0.1</ixx>
+            <iyy>0.1</iyy>
+            <izz>0.1</izz>
+            </inertia>
+        </inertial>
+
+        <!-- collision block (same size as visual) -->
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 0.2 0.2</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <!-- Visualize the blue box -->
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>0.2 0.2 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 1 1</ambient>
+            <diffuse>0 0 1 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- ─────────────────────────────────────────────────────
+             ↓  THIS IS THE DVS CAMERA SENSOR (instead of a normal camera) ↓
+             ─────────────────────────────────────────────────────
+        -->
+        <sensor name="dvs_cam" type="camera">
+          <!-- place it 0.1 m above the box center (i.e. at z=1.1 m) -->
+          <pose>0 0 0.1 0 0 0</pose>
+
+          <!-- The “camera” sub‐element defines the virtual image plane size -->
+          <camera name="__default__">
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>128</width>
+              <height>128</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>100</far>
+            </clip>
+          </camera>
+
+          <!-- We set this to 0 if you don’t want the normal image published -->
+          <visualize>0</visualize>
+
+          <!-- The plugin tag below is exactly from the gazebo_dvs_plugin README: -->
+          <!-- :contentReference[oaicite:1]{index=1} -->
+          <plugin name="dvs_plugin" filename="libgazebo_dvs_plugin.so">
+            <!-- cameraName and robotNamespace determine the ROS topic: -->
+            <cameraName>front_cam</cameraName>
+            <robotNamespace>lane_demo</robotNamespace>
+
+            <!-- Pixel‐wise threshold (change to tune sensitivity) -->
+            <eventThreshold>0.5</eventThreshold>
+
+            <!-- Topic on which camera_info is published (optional) -->
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+
+            <!-- Optional (default is "events"); uncomment to override:
+            <eventsTopicName>events</eventsTopicName>
+            -->
+          </plugin>
+        </sensor>
+        <sensor name="rgb_camera" type="camera">
+          <!-- place it 0.1 m above the box center (i.e. at z=1.1 m) -->
+          <!-- place it 0.1 m above the box center (i.e. at z=1.1 m) -->
+          <pose>0 0 0.1 0 0 0</pose>
+          <always_on>true</always_on>
+          <update_rate>30.0</update_rate>
+          <visualize>true</visualize>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <robotNamespace>/camera</robotNamespace>
+            <cameraName>rgb_camera</cameraName>
+            <imageTopicName>rgb/image_raw</imageTopicName>
+            <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+            <frameName>camera_link</frameName>
+          </plugin>
+        </sensor>
+      </link>
+
+      <!-- Add Gazebo ROS Planar Move plugin -->
+      <plugin name="drive_plugin" filename="libgazebo_ros_planar_move.so">
+        <ros>
+          <namespace>/lane_demo</namespace>
+          <remapping>cmd_vel:=cmd_vel</remapping>
+        </ros>
+        <bodyName>link</bodyName>
+        <topicName>cmd_vel</topicName>
+        <odometryTopicName>odom</odometryTopicName>
+        <updateRate>100.0</updateRate>
+        <linearSpeedGain>1.0</linearSpeedGain>
+        <angularSpeedGain>4.0</angularSpeedGain>
+      </plugin>
+  </model>
+</sdf>

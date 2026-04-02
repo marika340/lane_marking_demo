@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  
+  <node name="spawn_box" pkg="gazebo_ros" type="spawn_model" args="-file $(find lane_marking_demo)/worlds/lane_demo_random_objects_slow_sdf.sdf -sdf -model moving_box -x 0 -y 0 -z 0.5" output="screen"/>
+</launch>
+
