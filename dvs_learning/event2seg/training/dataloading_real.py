@@ -104,6 +104,18 @@ class SegDataset(Dataset):
             mask_seq.append(mask)
         mask_seq = torch.stack(mask_seq, dim=0)  # (T,1,H,W)
 
+        # Independent 50% augmentations:
+        # - horizontal flip for both event and mask sequences
+        # - slight per-frame random pixel noise for event sequence only
+        if random.random() < 0.5:
+            event_seq = torch.flip(event_seq, dims=[-1])
+            mask_seq = torch.flip(mask_seq, dims=[-1])
+
+        if random.random() < 0.5:
+            for t in range(event_seq.shape[0]):
+                noise_std = random.uniform(0.005, 0.02)
+                event_seq[t] = event_seq[t] + torch.randn_like(event_seq[t]) * noise_std
+
         return event_seq, mask_seq
 
 
