@@ -306,7 +306,8 @@ def visualize_and_save(ev0, pr0, gt0, out_dir="pred_debug", prefix="sample0"):
     plt.show()
 
     # save raw tensors too (handy for Overleaf figures etc.)
-    vutils.save_image(torch.sigmoid(pr0), opj(out_dir, f"{prefix}_pred.png"))
+    plt.imsave(opj(out_dir, f"{prefix}_pred.png"), pr_img, cmap='gray')
+    # vutils.save_image(torch.sigmoid(pr0), opj(out_dir, f"{prefix}_pred.png"))
     vutils.save_image(gt0.float(),        opj(out_dir, f"{prefix}_gt.png"))
     vutils.save_image(ev0.float(),        opj(out_dir, f"{prefix}_event.png"))
 
@@ -321,8 +322,13 @@ def main():
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
     # rebuild val loader
-    train_dirs = parse_dirs(args.basedir, args.train_dir)
-    val_dirs   = parse_dirs(args.basedir, args.val_dir)
+    # train_dirs = parse_dirs(args.basedir, args.train_dir)
+    # val_dirs   = parse_dirs(args.basedir, args.val_dir)
+
+    data_dir = os.path.join(args.basedir, "data")
+
+    train_dirs = parse_dirs(data_dir, args.train_dir)
+    val_dirs   = parse_dirs(data_dir, args.val_dir)
 
     _, val_loader = dataloader(
         data_dir=args.basedir,

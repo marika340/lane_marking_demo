@@ -3,7 +3,6 @@ real_data_root = /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/data
 event_npy_path = /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/data/evs_frames.npy
 align_mode = drop_first_image
 val_split = 0.25
-logdir = dvs_learning/event2seg/training/log
 model_type = ViT
 epochs = 500
 lr = 1e-4
@@ -11,5 +10,5 @@ device = cuda
 seq_len = 16
 batch_size = 8
 num_workers = 4
-checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d04_02_t22_24/model_500.pth
-
+# checkpoint path to simulation training
+checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d04_02_t22_24/best_model_217.pth

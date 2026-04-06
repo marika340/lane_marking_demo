@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(HERE)
 sys.path.append(opj(HERE, "../models"))
 
-from train_on_real import argparsing, parse_dirs
+from train_on_real3 import argparsing, parse_dirs
 from dataloading_real import dataloader
 import model_on_real as model_library
 import re
@@ -117,17 +117,23 @@ def prep_batch_for_model(event_batch, mask_batch, model_type, device):
     # CASE 2: ViT
     # -------------------------------------------------------------------------
     if model_type == "ViT":
-        # TRAINER.validate branch for ViT:
+        # Mirror TRAINER.train()/validate() exactly:
         #   B,T,C,H,W = event_batch.shape
-        #   event_batch_flat = event_batch.view(B*T,C,H,W)   # NO RESIZE for input
+        #   event_batch_flat = event_batch.view(B*T,C,H,W)
         #   mask_batch_flat  = mask_batch.view(B*T,C,H,W)
-        #   mask_small = F.interpolate(mask_batch_flat, (60,90)), threshold
-        #   X = [event_batch_flat]
+        #   event_small = F.interpolate(event_batch_flat, (60,90))
+        #   mask_small  = F.interpolate(mask_batch_flat, (60,90)), threshold
+        #   X = [event_small]
         Be, Te, Ce, He, We = event_batch.shape
         Bm, Tm, Cm, Hm, Wm = mask_batch.shape
 
         event_btchw = event_batch.view(Be * Te, Ce, He, We)
         mask_btchw = mask_batch.view(Bm * Tm, Cm, Hm, Wm)
+
+        event_small = F.interpolate(
+            event_btchw, size=(60, 90),
+            mode='bilinear', align_corners=False
+        )  # (B*T,1,60,90)
 
         mask_small  = F.interpolate(
             mask_btchw, size=(60, 90),
@@ -135,13 +141,9 @@ def prep_batch_for_model(event_batch, mask_batch, model_type, device):
         )  # (B*T,1,60,90)
         mask_small  = (mask_small > 0.08).float()
 
-        X_for_model = [event_btchw]  # feed full-res frames directly
-
-        # for visualization, let's ALSO prepare a downsampled event version
-        event_vis_small = F.interpolate(
-            event_btchw, size=(60, 90),
-            mode='bilinear', align_corners=False
-        )  # (B*T,1,60,90) -> nice to display next to pred/mask
+        X_for_model = [event_small]
+        # Reuse the exact model input tensor for visualization alignment.
+        event_vis_small = event_small
 
         meta = {
             "type": "ViT",
@@ -349,8 +351,8 @@ def main():
     model = load_weights(model, ckpt_path, device)
 
     # pull one batch from val
-    event_batch, mask_batch = next(iter(val_loader))
-    # event_batch, mask_batch = next(iter(train_loader))
+    # event_batch, mask_batch = next(iter(val_loader))
+    event_batch, mask_batch = next(iter(train_loader))
 
     # preprocess for the right model_type ("SimpleCNN", "ViT", or sequence)
     X_for_model, mask_proc, event_for_vis_small, meta = prep_batch_for_model(

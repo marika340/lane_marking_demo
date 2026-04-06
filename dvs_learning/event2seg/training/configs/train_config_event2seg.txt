@@ -1,4 +1,4 @@
---basedir /home/marikan/catkin_ws/src/lane_marking_demo
+--basedir /home/marikan/catkin_ws/src/lane_marking_demo/data
 --dataset_range 417-516
 --logdir dvs_learning/event2seg/training/log
 --model_type ViT

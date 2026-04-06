@@ -12,4 +12,5 @@
 --val_dir 501-516,701-716
 
 # Optional: based on evaluation
---checkpoint_path /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d11_03_t16_37/best_model_233.pth
+# --checkpoint_path /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d11_03_t16_37/best_model_233.pth
+--checkpoint_path /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d04_02_t22_24/best_model_217.pth

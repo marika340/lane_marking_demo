@@ -1,4 +1,5 @@
 dataset*/
+data/
 DO_NOT_USE*/
 logs/
 log/
@@ -9,4 +10,5 @@ __pycache__/
 *.png
 *.pth
 runs/
+*.tar
 
