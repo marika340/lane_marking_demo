@@ -351,8 +351,8 @@ def main():
     model = load_weights(model, ckpt_path, device)
 
     # pull one batch from val
-    # event_batch, mask_batch = next(iter(val_loader))
-    event_batch, mask_batch = next(iter(train_loader))
+    event_batch, mask_batch = next(iter(val_loader))
+    # event_batch, mask_batch = next(iter(train_loader))
 
     # preprocess for the right model_type ("SimpleCNN", "ViT", or sequence)
     X_for_model, mask_proc, event_for_vis_small, meta = prep_batch_for_model(

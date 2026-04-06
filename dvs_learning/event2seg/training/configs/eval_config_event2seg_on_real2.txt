@@ -11,5 +11,4 @@ device = cuda
 seq_len = 16
 batch_size = 8
 num_workers = 4
-checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/dvs_learning/event2seg/training/log/d04_02_t22_24/model_500.pth
-
+checkpoint_path = /home/marikan/catkin_ws/src/lane_marking_demo/logs/d04_06_t09_23/model_500.pth
