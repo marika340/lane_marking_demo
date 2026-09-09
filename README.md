@@ -1,5 +1,8 @@
 # vijaylab_car_summer2025
 
+## Note
+This is inspired from [evfly](https://openreview.net/pdf?id=82bpTugrMt) and [vitfly](https://arxiv.org/abs/2405.10391) works, and some concepts/codes were borrowed from them. 
+
 ## How to use 
 Run the following commands. 
 

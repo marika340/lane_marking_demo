@@ -161,7 +161,9 @@ class TRAINER:
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
 
         # BCE loss on logits
-        self.criterion = torch.nn.BCEWithLogitsLoss()
+        self.criterion = torch.nn.BCEWithLogitsLoss(pos_weight=torch.tensor(5.0).to(self.device))
+        # MSE loss
+        # self.criterion = torch.nn.MSELoss()
 
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             self.optimizer, T_max=self.epochs, eta_min=1e-5

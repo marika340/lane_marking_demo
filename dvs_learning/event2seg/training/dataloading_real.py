@@ -111,21 +111,22 @@ class SegDataset(Dataset):
             event_seq = torch.flip(event_seq, dims=[-1])
             mask_seq = torch.flip(mask_seq, dims=[-1])
 
-        if True:
-        # if random.random() < 0.5:
+        # if True:
+        if random.random() < 0.5:
             # before noise
             for t in range(event_seq.shape[0]):
-                noise_std = random.uniform(0.8, 10.0)
+                # event_seq[t] = torch.ones_like(event_seq[t])
+                noise_std = random.uniform(0.1, 0.3)
                 event_seq[t] = event_seq[t] + torch.randn_like(event_seq[t]) * noise_std
             # after noise
-            print(f"[SegDataset] idx={idx} noise_applied=1")
-        else:
-            ones_without_noise = int((event_seq > 0).sum().item())
-            total_pixels = event_seq.numel()
-            print(
-                f"[SegDataset] idx={idx} noise_applied=0 "
-                f"binary_event_ones={ones_without_noise}/{total_pixels}"
-            )
+            # print(f"[SegDataset] idx={idx} noise_applied=1")
+        # else:
+        #     ones_without_noise = int((event_seq > 0).sum().item())
+        #     total_pixels = event_seq.numel()
+            # print(
+            #     f"[SegDataset] idx={idx} noise_applied=0 "
+            #     f"binary_event_ones={ones_without_noise}/{total_pixels}"
+            # )
 
         return event_seq, mask_seq
 
